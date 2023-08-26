@@ -1,0 +1,23 @@
+{
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
+  "python.formatting.provider": "none",
+  "cSpell.words": [
+    "autoflush",
+    "checkpw",
+    "ENDC",
+    "fastapi",
+    "gensalt",
+    "hashpw",
+    "levelname",
+    "manejador",
+    "passlib",
+    "postgresql",
+    "pydantic",
+    "sessionmaker",
+    "sqlalchemy",
+    "SQLALCHEMY",
+    "starlette"
+  ]
+}

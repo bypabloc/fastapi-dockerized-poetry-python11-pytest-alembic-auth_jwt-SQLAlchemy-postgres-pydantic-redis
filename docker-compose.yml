@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; uvicorn app.main:app --host 0.0.0.0'
+    volumes:
+      - .:/app
+    ports:
+      - 8008:8000
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT:-dev}
+      - DB_URI=${DB_URI:-postgresql+asyncpg://project_x:project_x@db:5432/project_x}
+      - DB_DRIVER=${DB_DRIVER:-postgresql+asyncpg}
+      - DB_USERNAME=${DB_USERNAME:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD:-123456}
+      - DB_HOST=${DB_HOST:-localhost}
+      - DB_PORT=${DB_PORT:-5465}
+      - DB_NAME=${DB_NAME:-test_db}
+      - SECRET_KEY=${SECRET_KEY:-5cdbe385a272cc8a5e694e7c29412c680412e0d4abc36837aadabc2d36e2d4c8}
+      - FIRST_SUPERUSER=${FIRST_SUPERUSER:-bypabloc@mail.com}
+      - FIRST_SUPERUSER_PASSWORD=${FIRST_SUPERUSER_PASSWORD:-123456}
+      - USERS_OPEN_REGISTRATION=${USERS_OPEN_REGISTRATION:-False}
+      - SERVER_NAME=${SERVER_NAME:-myserver.com}
+      - SERVER_HOST=${SERVER_HOST:-http://myserver.com}
+    depends_on:
+      - db
+  db:
+    image: postgres:15-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=project_x
+      - POSTGRES_PASSWORD=project_x
+      - POSTGRES_DB=project_x
+
+volumes:
+  postgres_data:

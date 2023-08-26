@@ -1,0 +1,12 @@
+fastapi==0.101.1
+psycopg2-binary==2.9.7
+uvicorn==0.23.2
+SQLAlchemy==2.0.20
+PyJWT==2.8.0
+bcrypt==4.0.1
+pydantic==2.2.1
+pydantic-settings==2.0.3
+pydantic[email]==2.2.1
+asyncpg==0.28.0
+loguru==0.7.0
+alembic==1.11.3

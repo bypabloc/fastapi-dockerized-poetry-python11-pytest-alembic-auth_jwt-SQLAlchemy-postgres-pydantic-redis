@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+      - 8009:80
+    environment:
+      - DATABASE_URL=postgresql://project_x_prod:project_x_prod@db:5432/project_x_prod
