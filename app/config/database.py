@@ -12,8 +12,6 @@ class SettingsDatabase(BaseSettings):
     """
     Settings class.
     """
-    MAX_TRIES: int = env_var.MAX_TRIES or 60 * 5
-    WAIT_SECONDS: int = env_var.WAIT_SECONDS or 1
     DB_USERNAME: str = env_var.DB_USERNAME
     DB_PASSWORD: str = env_var.DB_PASSWORD
     DB_HOST: str = env_var.DB_HOST
