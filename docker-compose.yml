@@ -1,9 +1,12 @@
+# Path: ./docker-compose.yml
+
 version: '3.8'
 
 services:
   web:
-    build: .
-    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; uvicorn app.main:app --host 0.0.0.0'
+    user: "1000:1000"
+    build:
+      dockerfile: Dockerfile
     volumes:
       - .:/app
     ports:
@@ -23,12 +26,15 @@ services:
       - USERS_OPEN_REGISTRATION=${USERS_OPEN_REGISTRATION:-False}
       - SERVER_NAME=${SERVER_NAME:-myserver.com}
       - SERVER_HOST=${SERVER_HOST:-http://myserver.com}
+      - BACKEND_CORS_ORIGINS=${BACKEND_CORS_ORIGINS:-["http://localhost:8000", "http://127.0.0.1:9000", "http://localhost:8080", "http://localhost:3000", "http://localhost:8008", "http://localhost:4200"]}
     depends_on:
       - db
   db:
     image: postgres:15-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "${DB_PORT:-5465}:5432"
     expose:
       - 5432
     environment:

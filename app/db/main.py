@@ -1,3 +1,11 @@
+"""
+Database module
+
+Path: app/db/main.py
+"""
+
+from contextlib import asynccontextmanager
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.orm import declarative_base
 
@@ -15,12 +23,17 @@ class Database:
     """
     Database class
     """
-    def __init__(self):
+    def __init__(self, db_uri: str):
         """
         Constructor
         """
-        self.__session = None
-        self.__engine = None
+        logger.info(f"DB_URI: {db_uri}")
+        self.__engine = create_async_engine(db_uri)
+        self.__session = async_sessionmaker(
+            bind=self.__engine,
+            expire_on_commit=False,
+            class_=AsyncSession,
+        )
 
     def connect(self):
         """
@@ -33,6 +46,7 @@ class Database:
         self.__session = async_sessionmaker(
             bind=self.__engine,
             autocommit=False,
+            autoflush=True,
         )
 
     async def disconnect(self):
@@ -41,12 +55,14 @@ class Database:
         """
         await self.__engine.dispose()
 
+    @asynccontextmanager
     async def get_db(self):
-        """
-        Get database
-        """
-        async with db.__session() as session:
+        session = self.__session()
+        try:
             yield session
-
-
-db = Database()
+            await session.commit()
+        except:
+            await session.rollback()
+            raise
+        finally:
+            await session.close()
