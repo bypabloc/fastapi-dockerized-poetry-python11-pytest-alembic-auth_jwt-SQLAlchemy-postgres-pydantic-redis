@@ -1,9 +1,10 @@
-echo "Waiting for postgres connection"
+#! /usr/bin/env bash
 
-while ! nc -z db 5432; do
-    sleep 0.1
-done
+# Let the DB start
+python ./app/scripts/backend_pre_start.py
 
-echo "PostgreSQL started"
+# # Run migrations
+# alembic upgrade head
 
-exec "$@"
+# # Create initial data in DB
+# python ./app/scripts/initial_data.py
