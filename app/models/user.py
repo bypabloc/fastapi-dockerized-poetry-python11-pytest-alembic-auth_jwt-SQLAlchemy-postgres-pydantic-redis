@@ -1,11 +1,3 @@
-"""
-User model
-
-This model is used to store the user information
-
-Path: app/models/user.py
-"""
-
 from datetime import datetime
 from uuid import uuid4
 
@@ -77,12 +69,13 @@ class User(Base):
 
         :return: List of users
         """
-        async with database as session:
-            skip = kwargs.get("skip", 0)
-            limit = kwargs.get("limit", 100)
-            query = sql.select(cls).offset(skip).limit(limit).order_by(cls.created_at.desc())
-            users = await session.execute(query)
-            return users
+        query = sql.select(cls)
+        users = await database.execute(query)
+        skip = kwargs.get("skip", 0)
+        limit = kwargs.get("limit", 100)
+        # add .offset(skip).limit(limit).all()
+        users = users.offset(skip).limit(limit).all()
+        return users
 
     @classmethod
     async def delete(cls, database, idx) -> bool:
