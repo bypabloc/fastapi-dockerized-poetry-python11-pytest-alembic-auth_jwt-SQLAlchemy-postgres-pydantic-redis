@@ -7,12 +7,9 @@ from fastapi.responses import Response
 from app.api.v1.routes import api_router
 from app.config.setting import settings
 from app.utils.logger import CustomLogger
-from app.db.main import Database
-from app.config.database import settings_database
+from app.db.main import db
 
 logger = CustomLogger(__name__)
-DB_URI = settings_database.DB_URI
-db = Database(DB_URI)
 
 app = FastAPI(
     title=settings.PROJECT_NAME,

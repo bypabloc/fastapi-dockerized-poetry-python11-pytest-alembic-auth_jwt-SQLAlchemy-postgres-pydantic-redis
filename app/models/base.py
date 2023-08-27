@@ -1,13 +1,3 @@
-"""
-Base model
-
-This module contains the base model for all models in the application.
-
-The base model is used to store the common attributes and methods for all models.
-
-Path: app/models/base.py
-"""
-
 from datetime import datetime
 from uuid import uuid4
 
@@ -39,10 +29,8 @@ class Base(DBBase):
     @declared_attr
     def __tablename__(self):
         # Generate tablename automatically
-        name_class = self.__name__.lower()
-        logger.debug(f"Generating tablename for {name_class}")
-        name_class = f'{name_class}s'
-        return name_class
+        logger.debug(f"Generating tablename for {self.__name__.lower()}")
+        return self.__name__.lower()
 
     def __repr__(self):
         # Generate str representation

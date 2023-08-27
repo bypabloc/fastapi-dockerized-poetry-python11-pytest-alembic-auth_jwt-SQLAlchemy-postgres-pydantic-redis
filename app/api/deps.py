@@ -18,14 +18,7 @@ from app.core.security import ALGORITHM as SECURITY_ALGORITHM
 from app.core.security import create_access_token
 
 from app.config.setting import settings
-from app.db.main import Database
-from app.config.database import settings_database
-from app.utils.logger import CustomLogger
-
-
-logger = CustomLogger(__name__)
-DB_URI = settings_database.DB_URI
-db = Database(DB_URI)
+from app.db.main import db
 
 
 reusable_oauth2 = OAuth2PasswordBearer(

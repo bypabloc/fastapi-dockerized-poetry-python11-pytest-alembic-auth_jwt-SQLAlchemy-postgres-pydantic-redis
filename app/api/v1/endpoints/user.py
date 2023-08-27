@@ -11,15 +11,9 @@ from sqlalchemy.orm import Session
 
 # from app.api.deps import get_current_active_superuser
 # from app.api.deps import get_current_active_user
-from app.db.main import Database
-from app.config.database import settings_database
-from app.utils.logger import CustomLogger
+from app.db.main import db
 from app.repository.user import UserRepository
 
-
-logger = CustomLogger(__name__)
-DB_URI = settings_database.DB_URI
-db = Database(DB_URI)
 
 router = APIRouter()
 
