@@ -5,6 +5,7 @@ version: '3.8'
 services:
   web:
     user: "1000:1000"
+    container_name: project_x_web
     build:
       dockerfile: Dockerfile
     volumes:
@@ -12,14 +13,14 @@ services:
     ports:
       - 8008:8000
     environment:
+      - DB_URI=${DB_URI}
+      - DB_DRIVER=${DB_DRIVER}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
       - ENVIRONMENT=${ENVIRONMENT:-dev}
-      - DB_URI=${DB_URI:-postgresql+asyncpg://project_x:project_x@db:5432/project_x}
-      - DB_DRIVER=${DB_DRIVER:-postgresql+asyncpg}
-      - DB_USERNAME=${DB_USERNAME:-postgres}
-      - DB_PASSWORD=${DB_PASSWORD:-123456}
-      - DB_HOST=${DB_HOST:-localhost}
-      - DB_PORT=${DB_PORT:-5465}
-      - DB_NAME=${DB_NAME:-test_db}
       - SECRET_KEY=${SECRET_KEY:-5cdbe385a272cc8a5e694e7c29412c680412e0d4abc36837aadabc2d36e2d4c8}
       - FIRST_SUPERUSER=${FIRST_SUPERUSER:-bypabloc@mail.com}
       - FIRST_SUPERUSER_PASSWORD=${FIRST_SUPERUSER_PASSWORD:-123456}
@@ -31,16 +32,17 @@ services:
       - db
   db:
     image: postgres:15-alpine
+    container_name: project_x_db
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     ports:
-      - "${DB_PORT:-5465}:5432"
+      - "${DB_PORT_EXTERNAL}:${DB_PORT}"
     expose:
-      - 5432
+      - ${DB_PORT}
     environment:
-      - POSTGRES_USER=project_x
-      - POSTGRES_PASSWORD=project_x
-      - POSTGRES_DB=project_x
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
 
 volumes:
   postgres_data:

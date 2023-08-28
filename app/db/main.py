@@ -57,6 +57,9 @@ class Database:
 
     @asynccontextmanager
     async def get_db(self):
+        """
+        Get database
+        """
         session = self.__session()
         try:
             yield session

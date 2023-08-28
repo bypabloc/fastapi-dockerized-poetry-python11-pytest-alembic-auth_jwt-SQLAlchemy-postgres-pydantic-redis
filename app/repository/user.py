@@ -6,6 +6,9 @@ from app.schemas.user import UserCreate
 from app.schemas.user import UserUpdate
 
 from app.utils.security import get_password_hash
+from app.utils.logger import CustomLogger
+
+logger = CustomLogger(__name__)
 
 
 class UserRepository(RepositoryBase):
@@ -15,16 +18,19 @@ class UserRepository(RepositoryBase):
     model = User
     schema = UserSchema
 
-    def create(self, obj_in: UserCreate) -> UserSchema:
+    async def create(self, obj_in: UserCreate) -> UserSchema:
         """
         Create a new user
         """
         obj = obj_in.dict()
-        obj["hashed_password"] = get_password_hash(obj.pop("password"))
-        return self.model.create(
+        hashed_password = get_password_hash(obj.pop("password"))
+        logger.info(f"hashed_password: {hashed_password}")
+        obj["hashed_password"] = hashed_password
+        user = await User.create(
             database=self.database,
             **obj,
         )
+        return user
 
     def update(self, idx: str, obj_in: UserUpdate) -> UserSchema:
         """
@@ -67,3 +73,15 @@ class UserRepository(RepositoryBase):
             skip=skip,
             limit=limit,
         )
+
+    async def get_by_email(self, email: str) -> UserSchema:
+        """
+        Get a user by email
+        """
+        user = await User.get_by_email(
+            database=self.database,
+            email=email,
+        )
+        if not user:
+            return None
+        return user

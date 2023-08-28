@@ -16,6 +16,9 @@ from sqlalchemy.sql import expression as sql
 
 
 from app.models.base import Base
+from app.utils.logger import CustomLogger
+
+logger = CustomLogger(__name__)
 
 
 class User(Base):
@@ -38,8 +41,8 @@ class User(Base):
             )
             .returning(
                 cls.id,
-                cls.email,
-            ),
+                cls.email
+            )
         )
         users = await database.execute(query)
         await database.commit()
@@ -98,3 +101,13 @@ class User(Base):
         await database.execute(query)
         await database.commit()
         return True
+
+    @classmethod
+    async def get_by_email(cls, database, email) -> "User":
+        """Get a user by email"""
+        query = sql.select(cls).where(cls.email == email)
+        users = await database.execute(query)
+        user = users.first()  # No desempaquetes aquí
+        if user is None:
+            return None
+        return user  # Retorna el usuario o None si no se encuentra
