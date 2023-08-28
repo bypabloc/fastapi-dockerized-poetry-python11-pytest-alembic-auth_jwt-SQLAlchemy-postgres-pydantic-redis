@@ -1,23 +1,24 @@
-from app.db.base_class import Base
-from app.db.main import engine
-from app.db.main import SessionLocal
+"""
+Initialize database
+
+Path: app/db/init_db.py
+"""
+
 from app.config.setting import settings
 from app.schemas.user import UserCreate
+from app.repository.user import UserRepository
 
 
-def init_db() -> None:
+async def init_db(database) -> None:
     """
     Initialize database
     """
-    database = SessionLocal()
-
-    Base.metadata.create_all(bind=engine)
-
-    user = get_user_by_email(database, email=settings.FIRST_SUPERUSER)
+    user_repository = UserRepository(database)
+    user = await user_repository.get_by_email(email=settings.FIRST_SUPERUSER)
     if not user:
         user_in = UserCreate(
             email=settings.FIRST_SUPERUSER,
             password=settings.FIRST_SUPERUSER_PASSWORD,
             is_superuser=True,
         )
-        user = user.create(database, obj_in=user_in)
+        user = await user_repository.create(obj_in=user_in)

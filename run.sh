@@ -4,6 +4,15 @@ echo "Waiting for postgres..."
 
 export SQLALCHEMY_DATABASE_URI=${DB_URI}
 
+ENV_PATH=${ENV_PATH:-/app/env.sh}
+echo "Checking for script in $ENV_PATH"
+if [ -f $ENV_PATH ] ; then
+    echo "Running script $ENV_PATH"
+    . "$ENV_PATH"
+else
+    echo "There is no script $ENV_PATH"
+fi
+
 # If there's a prestart.sh script in the /app directory or other path specified, run it before starting
 PRE_START_PATH=${PRE_START_PATH:-/app/prestart.sh}
 echo "Checking for script in $PRE_START_PATH"

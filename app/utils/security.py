@@ -39,5 +39,11 @@ def get_password_hash(password: str):
     """
     Encriptar la contraseña
     """
-    hashed_password = hashpw(password.encode('utf-8'), settings.SECRET_KEY)
-    return hashed_password
+    salt = gensalt()
+    # Generar el hash en bytes
+    hashed_password_bytes = hashpw(password.encode('utf-8'), salt)
+
+    # Convertir el hash de bytes a cadena
+    hashed_password_str = hashed_password_bytes.decode('utf-8')
+
+    return hashed_password_str
