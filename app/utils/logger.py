@@ -1,6 +1,9 @@
 """
 Módulo para el manejo de logs
+
+Path: app/utils/logger.py
 """
+import inspect
 
 from logging import Formatter as LogFormatter
 from logging import getLogger as log_getLogger
@@ -41,7 +44,7 @@ class CustomLogger:
         self.logger.setLevel(LogDebug if environment != "prod" else LogInfo)
         console_format = LogStreamHandler(sys_stdout)
         formatter = ColoredFormatter(
-            "[%(asctime)s] [%(filename)s:%(lineno)d] %(message)s",
+            "[%(asctime)s] %(message)s",  # Removido [%(filename)s:%(lineno)d]
             datefmt="%Y-%m-%d %H:%M:%S"
         )
         console_format.setFormatter(formatter)
@@ -53,7 +56,11 @@ class CustomLogger:
         Log a message with severity 'level' on the logger corresponding to this
         custom logger. If the logger has no such handler, the message is ignored.
         """
-        msg_parts = []
+        frame = inspect.currentframe().f_back.f_back  # Obtener el marco anterior al actual
+        filename = frame.f_code.co_filename.split('/')[-1]  # Obtener el nombre del archivo
+        lineno = frame.f_lineno  # Obtener el número de línea
+
+        msg_parts = [f"[{level.upper()}]"]
         for arg in args:
             if isinstance(arg, dict):
                 msg_parts.append(self.format_dict(arg))
@@ -62,7 +69,9 @@ class CustomLogger:
             else:
                 msg_parts.append(str(arg))
         msg = " ".join(msg_parts)
-        getattr(self.logger, level)(msg)
+
+        log_message = f"[{filename}:{lineno}] {msg}"  # Agregar el archivo y el número de línea al mensaje
+        getattr(self.logger, level)(log_message)
 
     @staticmethod
     def format_dict(obj):
