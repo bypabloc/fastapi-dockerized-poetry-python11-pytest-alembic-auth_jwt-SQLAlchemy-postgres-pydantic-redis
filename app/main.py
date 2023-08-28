@@ -1,3 +1,12 @@
+"""
+File to start the application
+
+This file is responsible for starting the application and
+setting up the database connection.
+
+Path: app/main.py
+"""
+
 from fastapi import FastAPI
 from fastapi import Depends
 from starlette.middleware.cors import CORSMiddleware
