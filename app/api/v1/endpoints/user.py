@@ -11,16 +11,12 @@ from sqlalchemy.orm import Session
 
 # from app.api.deps import get_current_active_superuser
 # from app.api.deps import get_current_active_user
-from app.db.main import Database
-from app.config.database import settings_database
 from app.utils.logger import CustomLogger
 from app.repository.user import UserRepository
-from app.schemas.user import UserSchema
+from app.api.deps import get_db
 
 
 logger = CustomLogger(__name__)
-DB_URI = settings_database.DB_URI
-db = Database(DB_URI)
 
 router = APIRouter()
 
@@ -30,6 +26,7 @@ router = APIRouter()
     # response_model=List[UserSchema],
 )
 async def read_users(
+    session: Session = Depends(get_db),
     skip: int = 0,
     limit: int = 100,
     # current_user: User = Depends(get_current_active_superuser),
@@ -37,10 +34,9 @@ async def read_users(
     """
     Retrieve users.
     """
-    async with db.get_db() as session:
-        user_repo = UserRepository(database=session)
-        users = await user_repo.get_all(skip=skip, limit=limit)
-        return users
+    user_repo = UserRepository(database=session)
+    users = await user_repo.get_all(skip=skip, limit=limit)
+    return users
 
 
 # @router.post("/", response_model=UserSchema)
