@@ -1,5 +1,12 @@
+"""
+User schemas
+
+Path: app/schemas/user.py
+"""
+
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, UUID4
+
 
 
 class UserBase(BaseModel):
@@ -11,7 +18,7 @@ class UserCreate(UserBase):
 
 
 class UserSchema(UserBase):
-    id: int
+    id: UUID4
     is_active: bool
     created_at: datetime
 

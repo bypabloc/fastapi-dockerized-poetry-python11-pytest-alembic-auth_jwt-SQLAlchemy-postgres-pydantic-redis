@@ -53,28 +53,3 @@ class Base(DBBase):
             f"{', '.join([f'{c}={getattr(self, c)}' for c in columns])}"
             f")>"
         )
-
-    @classmethod
-    async def create(cls, **kwargs):
-        """Create a new user"""
-        raise NotImplementedError
-
-    @classmethod
-    async def update(cls, **kwargs):
-        """Update a user"""
-        raise NotImplementedError
-
-    @classmethod
-    async def get(cls, **kwargs):
-        """Get a user"""
-        raise NotImplementedError
-
-    @classmethod
-    async def get_all(cls, **kwargs):
-        """Get all users"""
-        raise NotImplementedError
-
-    @classmethod
-    async def delete(*args, **kwargs):
-        """Delete a user"""
-        raise NotImplementedError

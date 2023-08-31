@@ -58,8 +58,6 @@ async def startup_event():
     """
     Startup event
     """
-    logger.info("Starting up...")
-    db.connect()
     logger.info("Startup completed")
 
 
