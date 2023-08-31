@@ -15,6 +15,7 @@ from app.db.main import Database
 from app.config.database import settings_database
 from app.utils.logger import CustomLogger
 from app.repository.user import UserRepository
+from app.schemas.user import UserSchema
 
 
 logger = CustomLogger(__name__)
@@ -29,7 +30,6 @@ router = APIRouter()
     # response_model=List[UserSchema],
 )
 async def read_users(
-    database: Session = Depends(db.get_db),
     skip: int = 0,
     limit: int = 100,
     # current_user: User = Depends(get_current_active_superuser),
@@ -37,8 +37,10 @@ async def read_users(
     """
     Retrieve users.
     """
-    users = await UserRepository(database).get_all(skip=skip, limit=limit)
-    return users
+    async with db.get_db() as session:
+        user_repo = UserRepository(database=session)
+        users = await user_repo.get_all(skip=skip, limit=limit)
+        return users
 
 
 # @router.post("/", response_model=UserSchema)

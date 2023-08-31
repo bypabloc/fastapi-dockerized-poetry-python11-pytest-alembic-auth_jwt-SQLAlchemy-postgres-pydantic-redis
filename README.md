@@ -1,5 +1,8 @@
 # TODO
-- [ ] cambiar instancia de sqlalchemy (en rutas) por una que se llame cuando se llame el modelo
+- [ ] agregar [middleware time](https://medium.com/@life-is-short-so-enjoy-it/fastapi-experiment-middleware-feature-c0a0c7314d74)
+- [ ] agregar tasks background [celery](https://levelup.gitconnected.com/fastapi-background-tasks-vs-celery-which-is-right-for-your-application-dff0a7216e55)
+- [ ] cambiar instancia de sqlalchemy a las rutas (Depends o Middleware)
+- [ ] agregar [traefik](https://testdriven.io/blog/fastapi-docker-traefik/)
 - [ ] agregar tests (pytest)
 - [ ] agregar auth (jwt)
 - [ ] agregar sistema de roles y permisos

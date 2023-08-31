@@ -15,9 +15,6 @@ class UserRepository(RepositoryBase):
     """
     User repository
     """
-    model = User
-    schema = UserSchema
-
     async def create(self, obj_in: UserCreate) -> UserSchema:
         """
         Create a new user
@@ -39,7 +36,7 @@ class UserRepository(RepositoryBase):
         obj = obj_in.dict()
         if obj.get("password"):
             obj["hashed_password"] = get_password_hash(obj.pop("password"))
-        return self.model.update(
+        return User.update(
             database=self.database,
             idx=idx,
             **obj,
@@ -49,7 +46,7 @@ class UserRepository(RepositoryBase):
         """
         Delete a user
         """
-        return self.model.delete(
+        return User.delete(
             database=self.database,
             idx=idx,
             soft_delete=True,
@@ -59,7 +56,7 @@ class UserRepository(RepositoryBase):
         """
         Get a user
         """
-        return self.model.get(
+        return User.get(
             database=self.database,
             idx=idx,
         )
@@ -68,11 +65,12 @@ class UserRepository(RepositoryBase):
         """
         Get all users
         """
-        return await self.model.get_all(
+        users = await User.get_all(
             database=self.database,
             skip=skip,
             limit=limit,
         )
+        return [UserSchema.from_orm(user) for user in users]
 
     async def get_by_email(self, email: str) -> UserSchema:
         """
