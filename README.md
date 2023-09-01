@@ -1,6 +1,6 @@
 # TODO
 - [ ] agregar fastapi y configuracion basica de db [FastAPI, SQLAlchemy 2.0, Pydantic-V2, Alembic, Postgres and Docker](https://python.plainenglish.io/fastapi-sqlalchemy-2-0-pydantic-v2-alembic-postgres-and-docker-2c429acfc333)
-- [ ] agregar [middleware time](https://medium.com/@life-is-short-so-enjoy-it/fastapi-experiment-middleware-feature-c0a0c7314d74)
+- [x] agregar [middleware time](https://medium.com/@life-is-short-so-enjoy-it/fastapi-experiment-middleware-feature-c0a0c7314d74)
 - [ ] agregar tasks background [celery](https://levelup.gitconnected.com/fastapi-background-tasks-vs-celery-which-is-right-for-your-application-dff0a7216e55)
 - [ ] cambiar instancia de sqlalchemy a las rutas (Depends o Middleware)
 - [ ] agregar [Traefik](https://testdriven.io/blog/fastapi-docker-traefik)

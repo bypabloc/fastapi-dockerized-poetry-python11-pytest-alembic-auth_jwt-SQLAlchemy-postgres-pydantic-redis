@@ -1,47 +1,48 @@
-#!/bin/sh
+#!/bin/bash
 
-# File to generate env variables for the container
-# Path: env.sh
+# Declare an associative array to store the variables
+declare -A env_vars
 
-echo "Generating env.sh..."
+# Read the .env file line by line
+while read -r line; do
+  # Skip comments and empty lines
+  [[ $line =~ ^#.*$ || -z $line ]] && continue
 
-# Cargar las variables de entorno desde .env al shell actual
-if [ -f .env ]; then
-    export $(grep -v '^#' .env | xargs)
-fi
+  # Extract key and value
+  key=$(echo $line | cut -d '=' -f 1)
+  value=$(echo $line | cut -d '=' -f 2-)
+
+  # Clean the value if it's a JSON-like array
+  if [[ $value =~ ^\[.*\]$ ]]; then
+    # No need to clean, it's a valid JSON array
+    :
+  else
+    value=$(echo $value | tr -d '[]"')
+  fi
+
+  # Store the key-value pair in the associative array
+  env_vars[$key]=$value
+done < .env
 
 # Establecer valores por defecto para las variables si no están definidas
-DB_DRIVER=${DB_DRIVER:-postgresql+asyncpg}
-DB_USERNAME=${DB_USERNAME:-postgres}
-DB_PASSWORD=${DB_PASSWORD:-123456}
-DB_HOST=${DB_HOST:-db}
-DB_PORT=${DB_PORT:-5432}
-DB_NAME=${DB_NAME:-test_db}
-DB_HOST_EXTERNAL=${DB_HOST_EXTERNAL:-$DB_HOST}
-DB_PORT_EXTERNAL=${DB_PORT_EXTERNAL:-$DB_PORT}
+env_vars[DB_DRIVER]=${env_vars[DB_DRIVER]:-postgresql+asyncpg}
+env_vars[DB_USERNAME]=${env_vars[DB_USERNAME]:-postgres}
+env_vars[DB_PASSWORD]=${env_vars[DB_PASSWORD]:-123456}
+env_vars[DB_HOST]=${env_vars[DB_HOST]:-db}
+env_vars[DB_PORT]=${env_vars[DB_PORT]:-5432}
+env_vars[DB_NAME]=${env_vars[DB_NAME]:-test_db}
+env_vars[DB_HOST_EXTERNAL]=${env_vars[DB_HOST_EXTERNAL]:-DB_HOST}
+env_vars[DB_PORT_EXTERNAL]=${env_vars[DB_PORT_EXTERNAL]:-DB_PORT}
 
-# Si DB_URI no está definido, construye el DB_URI a partir de las otras variables
-if [ -z "$DB_URI" ]; then
-    DB_URI="${DB_DRIVER}://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}"
+if [[ -z "${env_vars[DB_URI]}" ]]; then
+  env_vars[DB_URI]=${env_vars[DB_DRIVER]}://${env_vars[DB_USERNAME]}:${env_vars[DB_PASSWORD]}@${env_vars[DB_HOST]}:${env_vars[DB_PORT]}/${env_vars[DB_NAME]}
 fi
 
-# Mostrar las variables para verificar (esto es opcional)
-echo "DB_DRIVER=$DB_DRIVER"
-echo "DB_USERNAME=$DB_USERNAME"
-echo "DB_PASSWORD=$DB_PASSWORD"
-echo "DB_HOST=$DB_HOST"
-echo "DB_PORT=$DB_PORT"
-echo "DB_NAME=$DB_NAME"
-echo "DB_URI=$DB_URI"
-echo "DB_PORT_EXTERNAL=$DB_PORT_EXTERNAL"
-echo "DB_HOST_EXTERNAL=$DB_HOST_EXTERNAL"
+env_vars[BACKEND_CORS_ORIGINS]=${env_vars[BACKEND_CORS_ORIGINS]:-["*"]}
+env_vars[BACKEND_CORS_METHODS]=${env_vars[BACKEND_CORS_METHODS]:-["*"]}
+env_vars[BACKEND_CORS_ALLOW_HEADERS]=${env_vars[BACKEND_CORS_ALLOW_HEADERS]:-["*"]}
 
-export DB_DRIVER
-export DB_USERNAME
-export DB_PASSWORD
-export DB_HOST
-export DB_PORT
-export DB_NAME
-export DB_URI
-export DB_PORT_EXTERNAL
-export DB_HOST_EXTERNAL
+# Export the variables to the environment
+for key in "${!env_vars[@]}"; do
+  export $key="${env_vars[$key]}"
+done

@@ -6,10 +6,11 @@ setting up the database connection.
 
 Path: app/main.py
 """
+import time
 
 from fastapi import FastAPI
 from fastapi import Depends
-from starlette.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.requests import Request
 from fastapi.responses import Response
 
@@ -41,15 +42,24 @@ async def log_request(request: Request):
     logger.info(await request.body())
 
 
-# Set all CORS enabled origins
-if settings.BACKEND_CORS_ORIGINS:
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=[str(origin) for origin in settings.BACKEND_CORS_ORIGINS],
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
+class CORSMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        response = await call_next(request)
+
+        origins = ", ".join(str(origin) for origin in settings.BACKEND_CORS_ORIGINS)
+        methods = ", ".join(str(method) for method in settings.BACKEND_CORS_METHODS)
+        headers = ", ".join(str(header) for header in settings.BACKEND_CORS_HEADERS)
+
+        response.headers['Access-Control-Allow-Origin'] = origins
+        response.headers['Access-Control-Allow-Methods'] = methods
+        response.headers['Access-Control-Allow-Headers'] = headers
+
+        return response
+
+
+app.add_middleware(
+    CORSMiddleware,
+)
 
 
 # Startup event
@@ -67,7 +77,9 @@ async def log_response(request: Request, call_next):
     """
     Log response status code and body
     """
+    start_time = time.time()
     response = await call_next(request)
+    response.headers["X-Process-Time"] = str(time.time() - start_time)
     body = b""
     async for chunk in response.body_iterator:
         body += chunk
@@ -87,6 +99,6 @@ app.include_router(
     dependencies=[
         Depends(
             log_request
-        )
+        ),
     ]
 )

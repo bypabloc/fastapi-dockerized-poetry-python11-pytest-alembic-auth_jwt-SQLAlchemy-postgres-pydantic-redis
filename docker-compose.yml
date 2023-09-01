@@ -12,22 +12,6 @@ services:
       - .:/app
     ports:
       - 8008:8000
-    environment:
-      - DB_URI=${DB_URI}
-      - DB_DRIVER=${DB_DRIVER}
-      - DB_USERNAME=${DB_USERNAME}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_HOST=${DB_HOST}
-      - DB_PORT=${DB_PORT}
-      - DB_NAME=${DB_NAME}
-      - ENVIRONMENT=${ENVIRONMENT:-dev}
-      - SECRET_KEY=${SECRET_KEY:-5cdbe385a272cc8a5e694e7c29412c680412e0d4abc36837aadabc2d36e2d4c8}
-      - FIRST_SUPERUSER=${FIRST_SUPERUSER:-bypabloc@mail.com}
-      - FIRST_SUPERUSER_PASSWORD=${FIRST_SUPERUSER_PASSWORD:-123456}
-      - USERS_OPEN_REGISTRATION=${USERS_OPEN_REGISTRATION:-False}
-      - SERVER_NAME=${SERVER_NAME:-myserver.com}
-      - SERVER_HOST=${SERVER_HOST:-http://myserver.com}
-      - BACKEND_CORS_ORIGINS=${BACKEND_CORS_ORIGINS:-["http://localhost:8000", "http://127.0.0.1:9000", "http://localhost:8080", "http://localhost:3000", "http://localhost:8008", "http://localhost:4200"]}
     depends_on:
       - db
   db:

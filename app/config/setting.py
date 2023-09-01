@@ -41,12 +41,10 @@ class Settings(BaseSettings):
 
     PROJECT_NAME: str = "Project X"
     SERVER_HOST: AnyHttpUrl
-    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = [
-        "http://localhost",
-        "http://localhost:4200",
-        "http://localhost:3000",
-        "http://localhost:8080",
-    ]
+
+    BACKEND_CORS_METHODS: List = env_var.BACKEND_CORS_METHODS
+    BACKEND_CORS_HEADERS: List = env_var.BACKEND_CORS_HEADERS
+    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = env_var.BACKEND_CORS_ORIGINS
 
     @validator("BACKEND_CORS_ORIGINS", pre=True)
     @classmethod

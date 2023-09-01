@@ -59,4 +59,4 @@ RUN chown -R app $HOME
 USER app
 
 # Ejecuta el script
-CMD ["sh", "/app/run.sh"]
+CMD ["bash", "/app/run.sh"]
