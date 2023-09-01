@@ -43,7 +43,13 @@ async def log_request(request: Request):
 
 
 class CORSMiddleware(BaseHTTPMiddleware):
+    """
+    Middleware to allow CORS
+    """
     async def dispatch(self, request: Request, call_next):
+        """
+        Dispatch method
+        """
         response = await call_next(request)
 
         origins = ", ".join(str(origin) for origin in settings.BACKEND_CORS_ORIGINS)
@@ -69,6 +75,15 @@ async def startup_event():
     Startup event
     """
     logger.info("Startup completed")
+
+
+# Shutdown event
+@app.on_event("shutdown")
+async def shutdown():
+    """
+    Shutdown event
+    """
+    await db.disconnect()
 
 
 # Log response status code and body

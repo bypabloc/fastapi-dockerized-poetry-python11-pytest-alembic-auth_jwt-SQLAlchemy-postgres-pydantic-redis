@@ -17,10 +17,20 @@
 
 ## Levantar el proyecto en docker:
 ```bash
-docker-compose up -d --build
+docker-compose -f docker-compose.yml up -d --build
 ```
 
 ## Para crear nuevas migraciones:
 ```bash
 docker exec -it project_x_web sh -c "poetry run alembic revision --autogenerate -m 'adds user table'"
+```
+
+## Bajar el proyecto en docker:
+```bash
+docker-compose down -v
+```
+
+## Para correr el proyecto en producción:
+```bash
+docker-compose -f docker-compose.prod.yml up -d --build
 ```
