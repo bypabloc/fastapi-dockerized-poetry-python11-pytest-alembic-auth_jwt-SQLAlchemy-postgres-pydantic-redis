@@ -1,10 +1,10 @@
 # TODO
-- [ ] agregar fastapi y configuracion basica de db [FastAPI, SQLAlchemy 2.0, Pydantic-V2, Alembic, Postgres and Docker](https://python.plainenglish.io/fastapi-sqlalchemy-2-0-pydantic-v2-alembic-postgres-and-docker-2c429acfc333)
+- [x] agregar fastapi y configuracion basica de db [FastAPI, SQLAlchemy 2.0, Pydantic-V2, Alembic, Postgres and Docker](https://python.plainenglish.io/fastapi-sqlalchemy-2-0-pydantic-v2-alembic-postgres-and-docker-2c429acfc333)
 - [x] agregar [middleware time](https://medium.com/@life-is-short-so-enjoy-it/fastapi-experiment-middleware-feature-c0a0c7314d74)
-- [ ] agregar tasks background [celery](https://levelup.gitconnected.com/fastapi-background-tasks-vs-celery-which-is-right-for-your-application-dff0a7216e55)
-- [ ] cambiar instancia de sqlalchemy a las rutas (Depends o Middleware)
-- [ ] agregar [Traefik](https://testdriven.io/blog/fastapi-docker-traefik)
+- [x] cambiar instancia de sqlalchemy a las rutas (Depends o Middleware)
+- [x] agregar [Traefik](https://testdriven.io/blog/fastapi-docker-traefik)
 - [ ] agregar tests (pytest)
+- [ ] agregar tasks background [celery](https://levelup.gitconnected.com/fastapi-background-tasks-vs-celery-which-is-right-for-your-application-dff0a7216e55)
 - [ ] agregar auth (jwt)
 - [ ] agregar sistema de roles y permisos
 - [ ] agregar redis
@@ -28,6 +28,7 @@ docker exec -it project_x_web sh -c "poetry run alembic revision --autogenerate 
 ## Bajar el proyecto en docker:
 ```bash
 docker-compose down -v
+docker-compose -f docker-compose.prod.yml down -v
 ```
 
 ## Para correr el proyecto en producción:
