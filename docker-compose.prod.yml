@@ -1,11 +1,31 @@
+# docker-compose.prod.yml
+
 version: '3.8'
 
 services:
   web:
+    user: "1000:1000"
+    container_name: project_x_web_prod
     build:
       context: .
       dockerfile: Dockerfile.prod
     ports:
-      - 8009:80
+      - 8009:8000
+    depends_on:
+      - db
+  db:
+    image: postgres:15-alpine
+    container_name: project_x_db_prod
+    volumes:
+      - postgres_data_prod:/var/lib/postgresql/data/
+    ports:
+      - "${DB_PORT_EXTERNAL}:${DB_PORT}"
+    expose:
+      - ${DB_PORT}
     environment:
-      - DATABASE_URL=postgresql://project_x_prod:project_x_prod@db:5432/project_x_prod
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+
+volumes:
+  postgres_data_prod:
