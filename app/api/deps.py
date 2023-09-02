@@ -1,3 +1,9 @@
+"""
+File to define dependencies
+
+Path: app/api/deps.py
+"""
+
 from typing import Generator
 
 from fastapi import Depends

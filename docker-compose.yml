@@ -2,10 +2,14 @@
 
 version: '3.8'
 
+networks:
+  my_network:
+    driver: bridge
+
 services:
-  web:
+  api:
     user: "1000:1000"
-    container_name: project_x_web
+    container_name: project_x_api
     build:
       dockerfile: Dockerfile
     volumes:
@@ -17,6 +21,9 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.fastapi.rule=Host(`api.localhost`)"
+    networks:
+      - my_network
+
   db:
     image: postgres:15-alpine
     container_name: project_x_db
@@ -30,6 +37,9 @@ services:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
+    networks:
+      - my_network
+
   traefik:
     image: traefik:v2.9.6
     container_name: project_x_traefik
@@ -39,6 +49,22 @@ services:
     volumes:
       - "./traefik.dev.toml:/etc/traefik/traefik.toml"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - my_network
+
+  test:
+    container_name: project_x_test
+    env_file:
+      - .env.test
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    volumes:
+      - .:/app
+    networks:
+      - my_network
+    depends_on:
+      - api
 
 volumes:
   postgres_data:

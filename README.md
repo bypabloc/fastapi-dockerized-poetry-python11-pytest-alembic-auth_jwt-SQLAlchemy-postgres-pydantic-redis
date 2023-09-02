@@ -35,3 +35,8 @@ docker-compose -f docker-compose.prod.yml down -v
 ```bash
 docker-compose -f docker-compose.prod.yml up -d --build
 ```
+
+## Endpoint de prueba:
+```bash
+http://api.localhost:8008/docs
+```

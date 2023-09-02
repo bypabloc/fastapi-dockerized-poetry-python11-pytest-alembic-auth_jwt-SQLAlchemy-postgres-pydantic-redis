@@ -1,3 +1,5 @@
+# Path: ./traefik/traefik.toml
+
 # listen on port 80
 [entryPoints]
   [entryPoints.web]
