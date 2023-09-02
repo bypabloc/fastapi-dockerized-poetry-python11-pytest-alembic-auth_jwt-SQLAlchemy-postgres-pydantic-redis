@@ -23,12 +23,6 @@ RUN poetry config virtualenvs.create false
 # Copy poetry.lock* in case it doesn't exist in the repo
 COPY pyproject.toml poetry.lock ./
 
-# # Allow installing dev dependencies to run tests
-# ARG INSTALL_DEV=false
-
-# RUN echo "Valor de INSTALL_DEV: $INSTALL_DEV"
-# RUN if [ "$INSTALL_DEV" = "true" ]; then poetry install --no-root; else poetry install --no-root --no-dev; fi
-
 RUN poetry install --no-root
 
 # Cambia a usuario root para asegurarte de que tienes los permisos necesarios para cambiar los permisos del script

@@ -19,5 +19,6 @@
     "sqlalchemy",
     "SQLALCHEMY",
     "starlette"
-  ]
+  ],
+  "githubPullRequests.ignoredPullRequestBranches": ["dev"]
 }
