@@ -3,7 +3,7 @@
 - [x] agregar [middleware time](https://medium.com/@life-is-short-so-enjoy-it/fastapi-experiment-middleware-feature-c0a0c7314d74)
 - [x] cambiar instancia de sqlalchemy a las rutas (Depends o Middleware)
 - [x] agregar [Traefik](https://testdriven.io/blog/fastapi-docker-traefik)
-- [ ] agregar tests (pytest)
+- [x] agregar tests (pytest)
 - [ ] agregar tasks background [celery](https://levelup.gitconnected.com/fastapi-background-tasks-vs-celery-which-is-right-for-your-application-dff0a7216e55)
 - [ ] agregar auth (jwt)
 - [ ] agregar sistema de roles y permisos
