@@ -3,23 +3,6 @@ File to define dependencies
 
 Path: app/api/deps.py
 """
-
-from typing import Generator
-
-from fastapi import Depends
-from fastapi import HTTPException
-from fastapi import status
-from fastapi.security import OAuth2PasswordBearer
-from jwt import encode as jwt_encode
-from pydantic import ValidationError
-from sqlalchemy.orm import Session
-
-from app.models.user import User
-
-
-# from app.schemas.item import ItemCreate
-# from app.schemas.token import TokenPayload
-
 from app.config.setting import settings
 from app.db.main import Database
 from app.config.database import settings_database
@@ -31,10 +14,6 @@ DB_URI = settings_database.DB_URI
 db = Database(DB_URI)
 ALGORITHM = settings.ALGORITHM
 
-
-# reusable_oauth2 = OAuth2PasswordBearer(
-#     tokenUrl=f"{settings.API_V1_STR}/login/access-token"
-# )
 
 async def get_db():
     """

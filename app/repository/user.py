@@ -42,16 +42,6 @@ class UserRepository(RepositoryBase):
             **obj,
         )
 
-    def delete(self, idx: str) -> UserSchema:
-        """
-        Delete a user
-        """
-        return User.delete(
-            database=self.database,
-            idx=idx,
-            soft_delete=True,
-        )
-
     def get(self, idx: str) -> UserSchema:
         """
         Get a user
