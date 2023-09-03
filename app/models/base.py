@@ -28,13 +28,14 @@ class Base(DBBase):
     """
     User model
     """
-    __abstract__ = True  # Esto indica que la clase Base es abstracta y no se debe crear una tabla para ella
+    __abstract__ = True
 
     id = Column(String, primary_key=True, default=str(uuid4()))
     is_active = Column(Boolean, default=True)
 
     created_at = Column(DateTime, index=True, default=datetime.utcnow)
-    updated_at = Column(DateTime, index=True, default=datetime.utcnow)
+    updated_at = Column(DateTime, index=True, nullable=True)
+    deleted_at = Column(DateTime, index=True, nullable=True)
 
     @declared_attr
     def __tablename__(self):
